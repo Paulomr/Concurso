@@ -6,25 +6,27 @@ const connectDB = require('./config/db');
 const app = express();
 app.use(express.json());
 
-// Conecta a la BD por petición (serverless). Si falla, pasa al manejador de errores.
-app.use(async (req, res, next) => {
+// Sirve los archivos estáticos del frontend (aquí el propio index.html).
+app.use(express.static(path.join(__dirname)));
+
+// Favicon: responde limpio para que no caiga en el manejador de errores.
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// --- API ---
+app.get('/health', async (req, res, next) => {
   try {
     await connectDB();
-    next();
+    res.json({ status: 'ok' });
   } catch (err) {
     next(err);
   }
 });
 
-// Favicon: responde limpio para que no caiga en el manejador de errores.
-app.get('/favicon.ico', (req, res) => res.status(204).end());
+// Catch-all SPA: cualquier ruta no-API devuelve index.html para que
+// el router del frontend maneje la navegación en producción.
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
-
-// Ruta raíz: sirve el front estático.
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'Concurso.html')));
-
-// Middleware global de manejo de errores (al final de las rutas).
+// Middleware global de manejo de errores (al final de todo).
 app.use((err, req, res, next) => {
   console.error('[Error]', err.stack || err);
   res.status(500).json({ error: 'Internal Server Error' });

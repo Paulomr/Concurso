@@ -262,7 +262,6 @@ h1 .amp{color:var(--peri)}
       <div class="reslock" id="resLock" style="display:none"></div>
     </div>
     <button class="btn btn-primary btn-block" id="btnSeeBoard">Ver la tabla</button>
-    <button class="btn btn-ghost" style="margin-top:10px" id="btnShare">Compartir en historia</button>
   </section>
 
   <!-- BOARD -->
@@ -520,11 +519,6 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 $('btnPeekBoard').addEventListener('click',loadBoard);
 $('btnSeeBoard').addEventListener('click',loadBoard);
 $('btnBackHome').addEventListener('click',()=>show('scStart'));
-$('btnShare').addEventListener('click',async()=>{
-  const txt='Saqué '+hits+'/20 en el Cuestionario Mundial 2026 x Crunchy Munch. ¿Me ganas? Juega aquí: '+location.href;
-  if(navigator.share){try{await navigator.share({title:'Crunchy Munch x Mundial 2026',text:txt,url:location.href});}catch(e){}}
-  else{try{await navigator.clipboard.writeText(txt);$('btnShare').textContent='¡Copiado! Pégalo en tu historia';}catch(e){}}
-});
 ['inName','inIg'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter')startGame();}));
 
 const STEPS=["Un solo intento y 15 segundos por pregunta","Gana quien mas acierte; en empate, gana el mas rapido","La tabla queda sellada hasta que se libere"];

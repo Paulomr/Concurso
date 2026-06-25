@@ -27,4 +27,14 @@ async function existePorInstagram(instagram) {
   return Boolean(doc);
 }
 
-module.exports = { crear, top, existePorInstagram };
+// Duplicado por mismo Instagram O mismo nombre.
+async function existeDuplicado({ nombre, instagram }) {
+  const or = [];
+  if (instagram) or.push({ instagram });
+  if (nombre) or.push({ nombre });
+  if (!or.length) return false;
+  const doc = await Concurso.exists({ $or: or });
+  return Boolean(doc);
+}
+
+module.exports = { crear, top, existePorInstagram, existeDuplicado };

@@ -384,7 +384,7 @@ function untilReveal(){
 
 const closeMs=new Date(FECHA_CIERRE).getTime();
 
-async function dbInsert(row){const r=await fetch(API_BASE+'/api/concursos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(row)});if(!r.ok)throw new Error('insert');return await r.json();}
+async function dbInsert(row){const r=await fetch(API_BASE+'/api/concursos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(row)});if(!r.ok){let m='insert';try{m=(await r.json()).error||m;}catch(e){}const err=new Error(m);err.status=r.status;throw err;}return await r.json();}
 async function dbTop(limit){const r=await fetch(API_BASE+'/api/concursos/top?limit='+limit);if(!r.ok)throw new Error('top');return await r.json();}
 async function dbExists(ig){const r=await fetch(API_BASE+'/api/concursos/exists?instagram='+encodeURIComponent(ig));if(!r.ok)return false;return (await r.json()).exists;}
 
@@ -503,7 +503,14 @@ async function finish(){
   show('scResult');
   let n=0;const t=setInterval(()=>{n++;$('resScore').textContent=n;if(n>=hits)clearInterval(t);},45);
   const row={nombre:player.name,instagram:player.ig,aciertos:hits,tiempo_ms:elapsed};myEntry=row;
-  try{ if(USE_DB){await dbInsert(row);}else{demoRows.push(row);} }catch(e){}
+  let dupMsg='';
+  try{ if(USE_DB){await dbInsert(row);}else{demoRows.push(row);} }catch(e){ if(e.status===409||e.status===400)dupMsg=e.message; }
+  if(dupMsg){
+    $('resRankPill').style.display='none';
+    $('resLock').style.display='block';
+    $('resLock').innerHTML='💗 '+dupMsg+'. Solo cuenta tu primer intento.';
+    return;
+  }
   if(boardReady()){
     $('resRankPill').style.display='inline-flex';$('resLock').style.display='none';
     $('resRank').textContent='...';

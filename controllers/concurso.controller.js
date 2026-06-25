@@ -14,6 +14,10 @@ async function crear(req, res) {
     if (!req.body || !req.body.nombre || !req.body.instagram) {
       return res.status(400).json({ error: 'nombre e instagram son obligatorios' });
     }
+    // Prevención de duplicados (mismo Instagram o mismo nombre).
+    if (await service.existeDuplicado(req.body)) {
+      return res.status(409).json({ error: 'Ese usuario o Instagram ya participó' });
+    }
     const creado = await service.crear(req.body);
     return res.status(201).json(creado);
   } catch (err) {

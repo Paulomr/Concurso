@@ -41,18 +41,26 @@ body{
 .card{background:var(--bone-2);border:1.5px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:24px 22px}
 
 /* ---------- START HERO ---------- */
-.hero{position:relative;text-align:center;padding-top:2px;margin-bottom:4px}
-.halo{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:min(360px,96vw);height:min(360px,96vw);border-radius:50%;
-  background:radial-gradient(circle,rgba(129,130,239,.5),rgba(251,157,237,.32) 42%,rgba(251,157,237,0) 68%);
-  filter:blur(4px);z-index:0;pointer-events:none;animation:glow 5s ease-in-out infinite}
-@keyframes glow{0%,100%{opacity:.85;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
-.hero-bear{position:relative;z-index:1;width:clamp(210px,58vw,300px);margin:0 auto;display:block;
-  filter:drop-shadow(0 18px 24px rgba(186,59,137,.32));animation:floaty 4.2s ease-in-out infinite}
+.hero{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 4px 6px;margin-bottom:6px}
+/* La Osa = protagonista: stage centrado con halo + sombra de doble capa */
+.hero-stage{position:relative;display:grid;place-items:center;width:min(380px,94vw);margin-bottom:2px}
+.halo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(340px,90vw);height:min(340px,90vw);border-radius:50%;
+  background:radial-gradient(circle,rgba(251,157,237,.55),rgba(129,130,239,.30) 44%,rgba(251,157,237,0) 70%);
+  filter:blur(6px);z-index:0;pointer-events:none;animation:glow 5s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.85;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+.hero-bear{position:relative;z-index:2;width:clamp(240px,66vw,330px);display:block;
+  filter:drop-shadow(0 10px 10px rgba(186,59,137,.22)) drop-shadow(0 26px 30px rgba(186,59,137,.34));
+  animation:floaty 4.2s ease-in-out infinite}
 @keyframes floaty{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
-.kicker{position:relative;z-index:2;font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--rasp);margin-bottom:8px}
-h1{position:relative;z-index:2;font-family:'Boldone';font-weight:400;font-size:clamp(30px,8.5vw,40px);line-height:.96;color:var(--rasp);letter-spacing:.5px;text-transform:uppercase;text-shadow:0 2px 0 #d678b8,0 5px 16px rgba(186,59,137,.28)}
+/* Badge de producto sobre la paleta rosa */
+.kicker{position:relative;z-index:2;display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--bone);
+  background:var(--rasp);padding:7px 14px;border-radius:999px;margin-bottom:14px;
+  box-shadow:0 8px 18px -8px rgba(186,59,137,.6)}
+.kicker::before{content:"🍪";font-size:13px;line-height:1}
+h1{position:relative;z-index:2;margin-top:14px;font-family:'Boldone';font-weight:400;font-size:clamp(32px,9vw,44px);line-height:.94;color:var(--rasp);letter-spacing:.5px;text-transform:uppercase;text-shadow:0 2px 0 #d678b8,0 6px 18px rgba(186,59,137,.30)}
 h1 .amp{color:var(--peri)}
-.subtitle{position:relative;z-index:2;margin-top:12px;font-size:15px;line-height:1.5;color:var(--ink);opacity:.88}
+.subtitle,.hero-sub{position:relative;z-index:2;margin-top:12px;max-width:32ch;font-size:15px;line-height:1.5;color:var(--ink);opacity:.9}
 
 .prize{position:relative;overflow:hidden;margin-top:20px;text-align:left;background:linear-gradient(125deg,var(--rasp),#8c2a66 70%);color:var(--bone);border-radius:20px;padding:17px 18px;box-shadow:0 16px 30px -14px rgba(186,59,137,.7)}
 .prize::after{content:"";position:absolute;top:-60%;left:-30%;width:60%;height:220%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.22),rgba(255,255,255,0));transform:rotate(18deg);animation:shine 5.5s ease-in-out infinite}
@@ -192,10 +200,13 @@ h1 .amp{color:var(--peri)}
   <!-- START -->
   <section class="screen active" id="scStart">
     <div class="hero">
-      <div class="halo"></div>
-      <img class="hero-bear" id="heroBear" alt="Mascota Crunchy Munch">
-      <div class="kicker">Concurso Mundialista</div>
+      <div class="kicker">Galletas estilo New York</div>
+      <div class="hero-stage">
+        <div class="halo" aria-hidden="true"></div>
+        <img class="hero-bear" id="heroBear" alt="La Osa, mascota de Crunchy Munch, con una galleta">
+      </div>
       <h1>Mundial 2026<br><span class="amp">x</span> Crunchy Munch</h1>
+      <p class="hero-sub">Juega, acierta y gana. La Osa trae el antojo: galletas grandes de 100g y mini de 6g.</p>
     </div>
 
     <div class="prize">

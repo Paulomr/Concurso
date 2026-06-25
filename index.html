@@ -187,7 +187,6 @@ h1 .amp{color:var(--peri)}
 
   <div class="topbar">
     <img class="logo" id="logoImg" alt="Crunchy Munch">
-    <div class="countdown"><span>El concurso cierra en</span><b id="cdText">--</b></div>
   </div>
 
   <!-- START -->
@@ -358,8 +357,6 @@ function untilReveal(){
 }
 
 const closeMs=new Date(FECHA_CIERRE).getTime();
-function tickCountdown(){const d=closeMs-Date.now();if(isNaN(closeMs)){$('cdText').textContent='--';return;}if(d<=0){$('cdText').textContent='CERRADO';return;}const days=Math.floor(d/864e5),h=Math.floor(d%864e5/36e5),m=Math.floor(d%36e5/6e4);$('cdText').textContent=days>0?days+'d '+h+'h':h+'h '+m+'m';}
-tickCountdown();setInterval(tickCountdown,30000);
 
 async function dbInsert(row){const r=await fetch(API_BASE+'/api/concursos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(row)});if(!r.ok)throw new Error('insert');return await r.json();}
 async function dbTop(limit){const r=await fetch(API_BASE+'/api/concursos/top?limit='+limit);if(!r.ok)throw new Error('top');return await r.json();}

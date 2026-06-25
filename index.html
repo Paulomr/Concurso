@@ -298,7 +298,7 @@ h1 .amp{color:var(--peri)}
 const API_BASE          = ""; // mismo origen; backend Node.js + MongoDB
 const FECHA_LANZAMIENTO = "2026-06-24T12:00:00";
 const HORAS_REVELACION  = 16;
-const FECHA_CIERRE      = "2026-07-19T23:59:59";
+const FECHA_CIERRE      = "2026-06-25T20:00:00-05:00"; // 25 jun 8PM Colombia: cierra y se abre la tabla
 const QTIME             = 15000; // ms por pregunta
 /* ============================================================ */
 
@@ -345,8 +345,9 @@ function fmt(ms){const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+pad(s%6
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function key(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 
-const REVEAL_MS=new Date(FECHA_LANZAMIENTO).getTime()+HORAS_REVELACION*3600*1000;
-function boardReady(){return isNaN(REVEAL_MS)||Date.now()>=REVEAL_MS;}
+const REVEAL_MS=new Date(FECHA_CIERRE).getTime(); // la tabla se abre justo al cierre
+function isClosed(){return !isNaN(REVEAL_MS)&&Date.now()>=REVEAL_MS;}
+function boardReady(){return isClosed();}
 function untilReveal(){
   const d=REVEAL_MS-Date.now();if(d<=0)return"";
   const days=Math.floor(d/864e5),h=Math.floor(d%864e5/36e5),m=Math.floor(d%36e5/6e4);
@@ -374,6 +375,7 @@ function demoSort(){return demoRows.slice().sort((a,b)=>b.aciertos-a.aciertos||a
 function normIg(s){s=s.replace(/^@+/,'').replace(/\s+/g,'');return s?'@'+s.toLowerCase():'';}
 $('btnStart').addEventListener('click',startGame);
 async function startGame(){
+  if(isClosed()){renderAccess();return;}
   const name=$('inName').value.trim(),ig=normIg($('inIg').value.trim());
   $('startErr').textContent='';
   if(name.length<2){$('startErr').textContent='Escribe tu nombre.';return;}
@@ -516,6 +518,17 @@ async function loadBoard(){
   });
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+// Renderizado condicional: antes del cierre -> participar (tabla oculta);
+// tras el cierre -> sin participación y se muestra la tabla de posiciones.
+function renderAccess(){
+  const closed=isClosed();
+  $('btnStart').style.display=closed?'none':'';
+  $('inName').closest('.field').style.display=closed?'none':'';
+  $('inIg').closest('.field').style.display=closed?'none':'';
+  $('btnPeekBoard').style.display=closed?'':'none';
+  $('startErr').textContent=closed?'El concurso ha finalizado. Mira la tabla de posiciones.':'';
+}
+renderAccess();
 $('btnPeekBoard').addEventListener('click',loadBoard);
 $('btnSeeBoard').addEventListener('click',loadBoard);
 $('btnBackHome').addEventListener('click',()=>show('scStart'));

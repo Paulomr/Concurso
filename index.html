@@ -26,11 +26,14 @@ body{
 #app{width:100%;max-width:500px;min-height:100dvh;display:flex;flex-direction:column;padding:18px clamp(16px,5vw,28px) 32px;position:relative}
 
 /* Logo como marca centrada en la cabecera del Hero (sin notch flotante) */
-/* Nuevo logo (wordmark 01.png) centrado, sin notch ni recuadro */
-.logo{width:auto;max-width:230px;height:auto;display:block;margin:0 auto 10px}
+/* Logo (wordmark 01.png): blanco para contraste + recorte del margen transparente */
+.logo{width:min(72vw,300px);aspect-ratio:4/1;object-fit:cover;object-position:center;display:block;margin:0 auto 8px;
+  filter:brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0,0,0,.16))}
 /* Splash / pantalla de carga */
 #splash{position:fixed;inset:0;z-index:9999;background:#FF7A99;display:grid;place-items:center;transition:opacity .5s ease}
-#splash img{width:min(70vw,300px);height:auto;animation:breathe 1.8s ease-in-out infinite}
+#splash img{width:min(84vw,380px);aspect-ratio:4/1;object-fit:cover;object-position:center;
+  filter:brightness(0) invert(1) drop-shadow(0 6px 16px rgba(0,0,0,.16));
+  animation:breathe 1.8s ease-in-out infinite}
 #splash.hide{opacity:0;pointer-events:none}
 @keyframes breathe{0%,100%{transform:scale(.92);opacity:.7}50%{transform:scale(1.06);opacity:1}}
 .countdown{display:flex;flex-direction:column;align-items:flex-end;background:var(--ink);color:var(--bone);padding:7px 13px;border-radius:14px}
@@ -240,8 +243,8 @@ h1 .amp{color:var(--peri)}
       <div class="dots" id="stepDots"></div>
     </div>
 
-    <div class="field"><label for="inName">Tu nombre</label><input id="inName" type="text" autocomplete="name" placeholder="Ej: Paulo Restrepo" maxlength="40"></div>
-    <div class="field"><label for="inIg">Tu Instagram</label><input id="inIg" type="text" autocomplete="off" placeholder="@tu_usuario" maxlength="32"></div>
+    <div class="field"><label for="inName">Tu nombre</label><input id="inName" type="text" autocomplete="name" placeholder="Ej: Apolo" maxlength="40"></div>
+    <div class="field"><label for="inIg">Tu Instagram</label><input id="inIg" type="text" autocomplete="off" placeholder="@bella" maxlength="32"></div>
     <div class="err" id="startErr"></div>
 
     <button class="btn btn-primary btn-block" id="btnStart">Jugar ya</button>

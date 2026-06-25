@@ -19,23 +19,18 @@
 html,body{height:100%}
 body{
   font-family:'Inter',system-ui,sans-serif;
-  background:#FF7A99;
+  background:
+    radial-gradient(150% 85% at 50% -25%, rgba(129,130,239,.42), rgba(129,130,239,0) 60%),
+    radial-gradient(110% 70% at 96% -5%, rgba(251,157,237,.45), rgba(251,157,237,0) 55%),
+    linear-gradient(180deg,#f1e8da 0%,var(--bone) 38%,#efe4d2 100%);
+  background-repeat:no-repeat;
   color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden;
   display:flex;justify-content:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
 }
+/* Fondo rosa SOLO en la pantalla de preguntas */
+body.quiz-bg{background:#FF7A99}
 #app{width:100%;max-width:500px;min-height:100dvh;display:flex;flex-direction:column;padding:18px clamp(16px,5vw,28px) 32px;position:relative}
 
-/* Logo como marca centrada en la cabecera del Hero (sin notch flotante) */
-/* Logo (wordmark 01.png): blanco para contraste + recorte del margen transparente */
-.logo{width:min(72vw,300px);aspect-ratio:4/1;object-fit:cover;object-position:center;display:block;margin:0 auto 8px;
-  filter:brightness(0) invert(1) drop-shadow(0 4px 10px rgba(0,0,0,.16))}
-/* Splash / pantalla de carga */
-#splash{position:fixed;inset:0;z-index:9999;background:#FF7A99;display:grid;place-items:center;transition:opacity .5s ease}
-#splash img{width:min(84vw,380px);aspect-ratio:4/1;object-fit:cover;object-position:center;
-  filter:brightness(0) invert(1) drop-shadow(0 6px 16px rgba(0,0,0,.16));
-  animation:breathe 1.8s ease-in-out infinite}
-#splash.hide{opacity:0;pointer-events:none}
-@keyframes breathe{0%,100%{transform:scale(.92);opacity:.7}50%{transform:scale(1.06);opacity:1}}
 .countdown{display:flex;flex-direction:column;align-items:flex-end;background:var(--ink);color:var(--bone);padding:7px 13px;border-radius:14px}
 .countdown span{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.7}
 .countdown b{font-family:'Boldone';font-weight:400;letter-spacing:1px;font-size:17px;color:var(--plum);line-height:1}
@@ -205,14 +200,12 @@ h1 .amp{color:var(--peri)}
 </style>
 </head>
 <body>
-<div id="splash"><img src="01.png" alt="Crunchy Munch"></div>
 <div class="demo-flag" id="demoFlag">Modo demo - sin Supabase</div>
 <div id="app">
 
   <!-- START -->
   <section class="screen active" id="scStart">
     <div class="hero">
-      <img class="logo" id="logoImg" src="01.png" alt="Crunchy Munch">
       <div class="hero-stage">
         <div class="halo" aria-hidden="true"></div>
         <img class="hero-bear" id="heroBear" alt="La Osa, mascota de Crunchy Munch, con una galleta">
@@ -368,7 +361,7 @@ let player={name:"",ig:""};
 let order=[],optMaps=[],idx=0,hits=0,startTime=0,timerInt=null,locked=false,myEntry=null;
 let perStart=0,perInt=null;
 const $=id=>document.getElementById(id);
-function show(scr){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(scr).classList.add('active');window.scrollTo(0,0);}
+function show(scr){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(scr).classList.add('active');document.body.classList.toggle('quiz-bg',scr==='scQuiz');window.scrollTo(0,0);}
 const pad=n=>String(n).padStart(2,'0');
 function fmt(ms){const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+pad(s%60);}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -581,14 +574,6 @@ function renderStep(){
   STEPS.forEach((_,i)=>{const d=document.createElement('span');d.className='dot'+(i===0?' on':'');dots.appendChild(d);});
   $('stepText').textContent=STEPS[0];
   setInterval(()=>{stepI=(stepI+1)%STEPS.length;renderStep();},3400);
-})();
-
-// Splash: desvanecer cuando el contenido esté listo.
-(function(){
-  const sp=document.getElementById('splash');if(!sp)return;
-  const hide=()=>{sp.classList.add('hide');setTimeout(()=>sp.remove(),600);};
-  if(document.readyState==='complete')setTimeout(hide,700);
-  else window.addEventListener('load',()=>setTimeout(hide,700));
 })();
 </script>
 </body>

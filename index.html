@@ -563,6 +563,9 @@ function renderAccess(){
   $('inIg').closest('.field').style.display=closed?'none':'';
   $('btnPeekBoard').style.display=closed?'':'none';
   $('startErr').textContent=closed?'El concurso ha finalizado. Mira la tabla de posiciones.':'';
+  // Cerrado: al abrir el link, mostrar ÚNICAMENTE la tabla de posiciones.
+  $('btnBackHome').style.display=closed?'none':'';
+  if(closed) loadBoard();
 }
 renderAccess();
 $('btnPeekBoard').addEventListener('click',loadBoard);

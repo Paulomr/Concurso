@@ -184,6 +184,12 @@ h1 .amp{color:var(--peri)}
 .row .sc{font-family:'Boldone';font-size:24px;color:var(--rasp);flex:none}
 .row .tm{font-size:10px;color:#a8957f;font-weight:600;text-align:right;flex:none;min-width:44px}
 .row.me{outline:2px dashed var(--peri);outline-offset:1px}
+/* Ganador resaltado en dorado */
+.row.winner{background:linear-gradient(110deg,#ffe89a,#fff7dc);border-color:#e6b800;box-shadow:0 8px 20px -10px rgba(217,163,0,.6)}
+.row.winner .rank,.row.winner .sc{color:#c8920a}
+.row.winner .name{color:#7a5b00}
+.row.winner .name::after{content:" 👑"}
+.row.winner .at{color:#b08400}
 .lock{text-align:center;padding:14px 6px 6px}
 .lock svg{width:64px;height:64px;margin-bottom:10px}
 .lock-title{font-family:'Boldone';font-size:22px;color:var(--rasp);text-transform:uppercase;letter-spacing:.5px}
@@ -540,8 +546,9 @@ async function loadBoard(){
   $('boardSub').textContent='Gana quien más acierta. El empate se define por tiempo.';
   board.slice(0,50).forEach((r,i)=>{
     const me=myEntry&&r.instagram===myEntry.instagram&&r.aciertos===myEntry.aciertos&&r.tiempo_ms===myEntry.tiempo_ms;
+    const winner=(r.instagram||'').toLowerCase()==='@_alejxdro';
     const row=document.createElement('div');
-    row.className='row'+(i<3?' top'+(i+1):'')+(me?' me':'');
+    row.className='row'+(i<3?' top'+(i+1):'')+(me?' me':'')+(winner?' winner':'');
     row.innerHTML='<div class="rank">'+(i+1)+'</div><div class="who"><div class="name">'+esc(r.nombre)+'</div><div class="at">'+esc(r.instagram)+'</div></div><div class="sc">'+r.aciertos+'</div><div class="tm">'+fmt(r.tiempo_ms)+'</div>';
     $('boardRows').appendChild(row);
   });
